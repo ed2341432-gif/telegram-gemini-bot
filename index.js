@@ -9,7 +9,10 @@ const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
 
 const TG_API = `https://api.telegram.org/bot${TELEGRAM_TOKEN}`;
 
-app.get("/health", (req, res) => res.send("OK"));
+// Healthcheck для Railway
+app.get("/health", (req, res) => {
+  res.status(200).send("OK");
+});
 
 app.post("/webhook", async (req, res) => {
   const msg = req.body?.message;
@@ -40,4 +43,9 @@ app.post("/webhook", async (req, res) => {
   res.sendStatus(200);
 });
 
-app.listen(3000, () => console.log("Bot running on 3000"));
+// ВАЖНО: Railway использует process.env.PORT
+const PORT = process.env.PORT || 3000;
+
+app.listen(PORT, () => {
+  console.log("Bot running on port", PORT);
+});
